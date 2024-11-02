@@ -8,25 +8,26 @@ import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 class MathController {
+
     val counter: AtomicLong = AtomicLong()
 
-    @RequestMapping(value = ["/sum/{numberOne}/{NumberTwo}"])
-    fun sum(
-        @PathVariable(value = "NumberOne") numberOne: String?,
-        @PathVariable(value = "NumberTwo") numberTwo: String?
+    @RequestMapping(value = ["/sum/{numberOne}/{numberTwo}"])
+    fun sum(@PathVariable(value="numberOne") numberOne: String?,
+            @PathVariable(value="numberTwo") numberTwo: String?
     ): Double {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw Exception("Valor é invalido")
-        } else {
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
+            throw Exception()
+        else{
             return convertToDouble(numberOne) + convertToDouble(numberTwo)
         }
     }
+
     private fun convertToDouble(strNumber: String?): Double {
         if (strNumber.isNullOrBlank()) return 0.0
+        // BR 10,20 US 10.20
         val number = strNumber.replace(",".toRegex(), ".")
         return if (isNumeric(number)) number.toDouble() else 0.0
     }
-
 
     private fun isNumeric(strNumber: String?): Boolean {
         if (strNumber.isNullOrBlank()) return false;
